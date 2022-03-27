@@ -14,14 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
 
-Route::prefix('v1/auth')->group(function (){
+Route::prefix('v1')->group(function (){
 
-    Route::post('register' , [\App\Http\Controllers\API\V1\Auth\AuthController::class , 'register']);
+   Route::prefix('/auth')->group(function (){
 
-    Route::get('show' , [\App\Http\Controllers\API\V1\Auth\AuthController::class , 'login']);
+       Route::post('/register' , [\App\Http\Controllers\API\V1\Auth\AuthController::class , 'register'])->name('auth.register');
+       Route::post('/login' , [\App\Http\Controllers\API\V1\Auth\AuthController::class , 'login'])->name('auth.login');
+       Route::post('/user' , [\App\Http\Controllers\API\V1\Auth\AuthController::class , 'getUser'])->name('auth.user');
+       Route::post('/logout' , [\App\Http\Controllers\API\V1\Auth\AuthController::class , 'logout'])->name('auth.logout');
+
+   });
 });
 
