@@ -25,5 +25,11 @@ Route::prefix('v1')->group(function (){
        Route::post('/logout' , [\App\Http\Controllers\API\V1\Auth\AuthController::class , 'logout'])->name('auth.logout');
 
    });
+
+   Route::prefix('channel')->group(function () {
+
+       Route::get('all' , [\App\Http\Controllers\API\V1\Channel\ChannelsController::class , 'getAllChannels'])->name('channels.list');
+       Route::post('store' , [\App\Http\Controllers\API\V1\Channel\ChannelsController::class , 'createNewChannel'])->name('channels.create');
+   });
 });
 
