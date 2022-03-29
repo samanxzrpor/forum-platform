@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreignId('channel_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->unsignedBigInteger('best_answer_id');
+            $table->unsignedBigInteger('best_answer_id')->nullable();
             $table->timestamps();
         });
     }

@@ -10,6 +10,7 @@ use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class AuthController extends Controller
@@ -31,7 +32,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message'=>'user created successfully'
-        ],201);
+        ],Response::HTTP_CREATED);
     }
 
 
@@ -47,7 +48,7 @@ class AuthController extends Controller
         $trustedData = $request->validated();
 
         if (Auth::attempt(['email' => $trustedData['email'], 'password' => $trustedData['password']]))
-            return response()->json(Auth::user() , 200);
+            return response()->json(Auth::user() , Response::HTTP_OK);
 
         throw ValidationException::withMessages([
             'email' => 'incorrect credentials'
@@ -56,7 +57,7 @@ class AuthController extends Controller
 
     public function getUser()
     {
-        return response()->json(Auth::user() , 200);
+        return response()->json(Auth::user() , Response::HTTP_OK);
     }
 
 

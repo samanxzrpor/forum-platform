@@ -29,7 +29,10 @@ Route::prefix('v1')->group(function (){
    Route::prefix('channel')->group(function () {
 
        Route::get('all' , [\App\Http\Controllers\API\V1\Channel\ChannelsController::class , 'getAllChannels'])->name('channels.list');
+       Route::get('get' , [\App\Http\Controllers\API\V1\Channel\ChannelsController::class , 'getOneChannel'])->name('channels.one');
        Route::post('store' , [\App\Http\Controllers\API\V1\Channel\ChannelsController::class , 'createNewChannel'])->name('channels.create');
+       Route::put('update' , [\App\Http\Controllers\API\V1\Channel\ChannelsController::class , 'updateChannel'])->name('channels.update');
+       Route::delete('delete' , [\App\Http\Controllers\API\V1\Channel\ChannelsController::class , 'deleteChannel'])->name('channels.delete');
    });
 });
 

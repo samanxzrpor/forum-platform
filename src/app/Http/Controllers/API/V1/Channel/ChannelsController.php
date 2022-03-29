@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\API\V1\Channel;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Channels\GetOneChannelRequest;
 use App\Http\Requests\Channels\StoreChannelRequest;
+use App\Http\Requests\Channels\UpdateChannelRequest;
 use App\Models\Channel;
 use App\Repositories\ChannelRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
 class ChannelsController extends Controller
 {
@@ -25,20 +28,25 @@ class ChannelsController extends Controller
 
         return response()->json([
             'message' => 'Channel created successfully'
-        ],201);
+        ],Response::HTTP_CREATED);
     }
+
 
     /**
      * @param string $slug
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getOneChannel(string $slug)
+    public function getOneChannel(GetOneChannelRequest $request)
     {
-        return response()->json(
-            Channel::where('slug',$slug)->first(),
-            200
+        $trustedData = $request->validated();
+
+        return response()->json([
+            'channel' => resolve(ChannelRepository::class)->getOneChannel($trustedData),
+        ],
+            Response::HTTP_OK
         );
     }
+
 
     /**
      * @method GET
@@ -48,18 +56,42 @@ class ChannelsController extends Controller
     {
         return response()->json(
             Channel::all(),
-            200
+            Response::HTTP_OK
         );
     }
 
-    public function delete()
-    {
 
+    /**
+     * @method DELETE
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteChannel(Request $request)
+    {
+        Channel::destroy($request->id);
+
+        return response()->json([
+                'message' => 'Channel deleted successfully'
+            ], Response::HTTP_OK);
     }
 
-    public function update()
-    {
 
+    /**
+     * Update Channels Data
+     * @method PUT
+     * @param UpdateChannelRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateChannel(UpdateChannelRequest $request)
+    {
+        $trustedData = $request->validated();
+
+        resolve(ChannelRepository::class)->updateChannel($trustedData);
+
+        return response()->json([
+            'message' => 'Channels updated successfully'
+        ], Response::HTTP_OK);
     }
+
 
 }
