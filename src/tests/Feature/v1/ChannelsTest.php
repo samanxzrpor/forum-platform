@@ -1,14 +1,16 @@
 <?php
 
-namespace Tests\Unit\v1;
+namespace Tests\Feature\v1;
 
-use App\Http\Controllers\API\V1\Channel\ChannelsController;
 use App\Models\Channel;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
+use function config;
+use function route;
 
 class ChannelsTest extends TestCase
 {
@@ -48,9 +50,10 @@ class ChannelsTest extends TestCase
     {
         $this->registerRolesAndPermissions();
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $user->givePermissionTo('channel management');
 
-        $response = $this->actingAs($user)->postJson(route('channels.create'));
+        $response = $this->postJson(route('channels.create'));
         $response->assertStatus(422);
     }
 
@@ -58,9 +61,10 @@ class ChannelsTest extends TestCase
     {
         $this->registerRolesAndPermissions();
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $user->givePermissionTo('channel management');
 
-        $response = $this->actingAs($user)->postJson(route('channels.create'),[
+        $response = $this->postJson(route('channels.create'),[
             'name' => 'NewChannelTest',
             'user_id' => $user->id
         ]);
@@ -72,9 +76,10 @@ class ChannelsTest extends TestCase
         $this->registerRolesAndPermissions();
         $channel = Channel::factory()->create();
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $user->givePermissionTo('channel management');
 
-        $response = $this->actingAs($user)->putJson(route('channels.update'),[
+        $response = $this->putJson(route('channels.update'),[
             'id' => $channel->id,
             'name' => 'New Name Test'
         ]);
@@ -89,9 +94,10 @@ class ChannelsTest extends TestCase
         $this->registerRolesAndPermissions();
         $channel = Channel::factory()->create();
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $user->givePermissionTo('channel management');
 
-        $response = $this->actingAs($user)->deleteJson(route('channels.delete'),[
+        $response = $this->deleteJson(route('channels.delete'),[
             'id' => $channel->id,
         ]);
 

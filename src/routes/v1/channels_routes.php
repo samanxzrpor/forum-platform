@@ -13,7 +13,7 @@ Route::prefix('channel')->group(function () {
     Route::get('get' , [ChannelsController::class , 'getOneChannel'])
         ->name('channels.one');
 
-    Route::middleware('can:channel management')->group(function () {
+    Route::middleware(['can:channel management','auth:sanctum'])->group(function () {
 
         Route::post('store' , [ChannelsController::class , 'createNewChannel'])
             ->name('channels.create');
