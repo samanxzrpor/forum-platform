@@ -19,7 +19,7 @@ class ChannelsController extends Controller
      * @param StoreChannelRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function createNewChannel(StoreChannelRequest $request)
+    public function store(StoreChannelRequest $request)
     {
         $trustedData = $request->validated();
 
@@ -36,15 +36,11 @@ class ChannelsController extends Controller
      * @param string $slug
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getOneChannel(GetOneChannelRequest $request)
+    public function show(Request $request)
     {
-        $trustedData = $request->validated();
-
-        return response()->json([
-            'channel' => resolve(ChannelRepository::class)->getOneChannel($trustedData),
-        ],
-            Response::HTTP_OK
-        );
+        return response()->json(
+            resolve(ChannelRepository::class)->getOneChannel($request->toArray())
+        , Response::HTTP_OK);
     }
 
 
@@ -52,7 +48,7 @@ class ChannelsController extends Controller
      * @method GET
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getAllChannels()
+    public function index()
     {
         return response()->json(
             Channel::all(),
@@ -66,7 +62,7 @@ class ChannelsController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteChannel(Request $request)
+    public function delete(Request $request)
     {
         Channel::destroy($request->id);
 
@@ -82,7 +78,7 @@ class ChannelsController extends Controller
      * @param UpdateChannelRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateChannel(UpdateChannelRequest $request)
+    public function update(UpdateChannelRequest $request)
     {
         $trustedData = $request->validated();
 

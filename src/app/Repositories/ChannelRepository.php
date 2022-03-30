@@ -33,9 +33,9 @@ class ChannelRepository
         ]);
     }
 
-    public function getOneChannel(mixed $trustedData)
+    public function getOneChannel(mixed $request)
     {
-        $field = array_values($trustedData);
-        return Channel::where($field,$trustedData[$field])->first();
+        $field = array_key_first($request);
+        return Channel::where($field,$request[$field])->first();
     }
 }
