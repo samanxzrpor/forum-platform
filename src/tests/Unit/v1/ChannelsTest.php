@@ -6,11 +6,34 @@ use App\Http\Controllers\API\V1\Channel\ChannelsController;
 use App\Models\Channel;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ChannelsTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function registerRolesAndPermissions()
+    {
+        if (Role::where('name' , config('permission.default_roles')[0])->count() < 1) {
+
+            foreach (config('permission.default_roles') as $role) {
+                Role::create([
+                    'name' => $role
+                ]);
+            }
+        }
+
+        if (Permission::where('name' , config('permission.default_permissions')[0])->count() < 1) {
+
+            foreach (config('permission.default_permissions') as $permission) {
+                Permission::create([
+                    'name' => $permission
+                ]);
+            }
+        }
+    }
 
     public function testGetAllChannels()
     {
@@ -23,15 +46,21 @@ class ChannelsTest extends TestCase
 
     public function testCreateNewChannelWithIncorrectData()
     {
-        $response = $this->postJson(route('channels.create'));
+        $this->registerRolesAndPermissions();
+        $user = User::factory()->create();
+        $user->givePermissionTo('channel management');
+
+        $response = $this->actingAs($user)->postJson(route('channels.create'));
         $response->assertStatus(422);
     }
 
     public function testCreateNewChannelWithCorrectData()
     {
+        $this->registerRolesAndPermissions();
         $user = User::factory()->create();
+        $user->givePermissionTo('channel management');
 
-        $response = $this->postJson(route('channels.create'),[
+        $response = $this->actingAs($user)->postJson(route('channels.create'),[
             'name' => 'NewChannelTest',
             'user_id' => $user->id
         ]);
@@ -40,9 +69,12 @@ class ChannelsTest extends TestCase
 
     public function testUpdateChannelInfoWithTrueData()
     {
+        $this->registerRolesAndPermissions();
         $channel = Channel::factory()->create();
+        $user = User::factory()->create();
+        $user->givePermissionTo('channel management');
 
-        $response = $this->putJson(route('channels.update'),[
+        $response = $this->actingAs($user)->putJson(route('channels.update'),[
             'id' => $channel->id,
             'name' => 'New Name Test'
         ]);
@@ -54,9 +86,12 @@ class ChannelsTest extends TestCase
 
     public function testDeleteChannel()
     {
+        $this->registerRolesAndPermissions();
         $channel = Channel::factory()->create();
+        $user = User::factory()->create();
+        $user->givePermissionTo('channel management');
 
-        $response = $this->deleteJson(route('channels.delete'),[
+        $response = $this->actingAs($user)->deleteJson(route('channels.delete'),[
             'id' => $channel->id,
         ]);
 
