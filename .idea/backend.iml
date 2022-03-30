@@ -117,6 +117,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/psr/container" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/psr/event-dispatcher" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/spatie/laravel-permission" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

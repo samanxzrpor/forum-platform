@@ -12,9 +12,9 @@ class UserRepository
      * @param mixed $trustedData
      * @return void
      */
-    public function createUser(mixed $trustedData): void
+    public function createUser(mixed $trustedData) : User
     {
-        User::create([
+        return User::create([
             'name' => $trustedData['name'],
             'email' => $trustedData['email'],
             'password' => Hash::make($trustedData['password'])

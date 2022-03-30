@@ -4,6 +4,8 @@ namespace Tests\Unit\v1;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
@@ -11,14 +13,37 @@ class AuthTest extends TestCase
 
     use RefreshDatabase;
 
+    public function registerRolesAndPermissions()
+    {
+        if (Role::where('name' , config('permission.default_roles')[0])->count() < 1) {
+
+            foreach (config('permission.default_roles') as $role) {
+                Role::create([
+                    'name' => $role
+                ]);
+            }
+        }
+
+        if (Permission::where('name' , config('permission.default_permissions')[0])->count() < 1) {
+
+            foreach (config('permission.default_permissions') as $permission) {
+                Permission::create([
+                    'name' => $permission
+                ]);
+            }
+        }
+    }
+
     public function testRegisterShouldBeValidate()
     {
+        $this->registerRolesAndPermissions();
         $response = $this->postJson(route('auth.register'));
         $response->assertStatus(422);
     }
 
     public function testRegisterWithTrueCredentials()
     {
+        $this->registerRolesAndPermissions();
         $response = $this->postJson(route('auth.register'),[
             'name' => 'Mohammad',
             'email' => 'xzrpor@gmail.com',

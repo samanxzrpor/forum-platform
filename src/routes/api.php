@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,22 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (){
 
-   Route::prefix('/auth')->group(function (){
+    # Authentication Route
+    include __DIR__ .'/v1/auth_routes.php';
 
-       Route::post('/register' , [\App\Http\Controllers\API\V1\Auth\AuthController::class , 'register'])->name('auth.register');
-       Route::post('/login' , [\App\Http\Controllers\API\V1\Auth\AuthController::class , 'login'])->name('auth.login');
-       Route::post('/user' , [\App\Http\Controllers\API\V1\Auth\AuthController::class , 'getUser'])->name('auth.user');
-       Route::post('/logout' , [\App\Http\Controllers\API\V1\Auth\AuthController::class , 'logout'])->name('auth.logout');
+    # Channels Route
+    include __DIR__ .'/v1/channels_routes.php';
 
-   });
-
-   Route::prefix('channel')->group(function () {
-
-       Route::get('all' , [\App\Http\Controllers\API\V1\Channel\ChannelsController::class , 'getAllChannels'])->name('channels.list');
-       Route::get('get' , [\App\Http\Controllers\API\V1\Channel\ChannelsController::class , 'getOneChannel'])->name('channels.one');
-       Route::post('store' , [\App\Http\Controllers\API\V1\Channel\ChannelsController::class , 'createNewChannel'])->name('channels.create');
-       Route::put('update' , [\App\Http\Controllers\API\V1\Channel\ChannelsController::class , 'updateChannel'])->name('channels.update');
-       Route::delete('delete' , [\App\Http\Controllers\API\V1\Channel\ChannelsController::class , 'deleteChannel'])->name('channels.delete');
-   });
 });
 

@@ -28,7 +28,11 @@ class AuthController extends Controller
         $trustedData = $request->validated();
 
         # insert User In Database
-        resolve(UserRepository::class)->createUser($trustedData);
+        $user = resolve(UserRepository::class)->createUser($trustedData);
+
+        $superAdminEmail = config('permission.default_super_admin_email');
+
+        $user->email === $superAdminEmail ? $user->assignRole('Super Admin') : $user->assignRole('User');
 
         return response()->json([
             'message'=>'user created successfully'
