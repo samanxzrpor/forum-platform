@@ -69,6 +69,8 @@ class ChannelsTest extends TestCase
             'user_id' => $user->id
         ]);
         $response->assertStatus(201);
+        $this->assertDatabaseHas('channels' , ['name'=>'NewChannelTest']);
+
     }
 
     public function testUpdateChannelInfoWithTrueData()
@@ -87,6 +89,7 @@ class ChannelsTest extends TestCase
         $updatedChannel = Channel::find($channel->id);
         $this->assertEquals($updatedChannel->name, 'New Name Test');
         $response->assertStatus(200);
+        $this->assertDatabaseHas('channels' , ['name'=>'New Name Test']);
     }
 
     public function testDeleteChannel()

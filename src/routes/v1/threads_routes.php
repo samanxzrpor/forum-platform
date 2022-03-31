@@ -8,4 +8,11 @@ Route::prefix('thread')->group(function (){
 
     Route::get('list' , [ThreadsController::class , 'index'])->name('thread.list');
     Route::get('show' , [ThreadsController::class , 'show'])->name('thread.show');
+
+    Route::middleware('auth:sanctum')->group(function () {
+
+        Route::put('update' , [ThreadsController::class , 'update'])->name('thread.update');
+        Route::post('store' , [ThreadsController::class , 'store'])->name('thread.store');
+        Route::delete('delete' , [ThreadsController::class , 'delete'])->name('thread.delete');
+    });
 });
