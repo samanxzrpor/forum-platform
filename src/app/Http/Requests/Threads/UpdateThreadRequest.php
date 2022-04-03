@@ -24,10 +24,10 @@ class UpdateThreadRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|integer',
             'title' => 'nullable|min:10',
+            'best_answer_id' => 'nullable|integer',
             'body' => 'nullable|min:10',
-            'channel_id' => 'required|integer'
+            'channel_id' => 'nullable|integer'
         ];
     }
 }

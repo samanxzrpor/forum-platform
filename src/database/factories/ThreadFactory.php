@@ -25,10 +25,10 @@ class ThreadFactory extends Factory
             'slug' => $this->faker->slug(),
             'body' => $this->faker->text(),
             'channel_id' => function(){
-                return Channel::factory()->create();
+                return Channel::factory()->create()->id;
             },
             'user_id' => function(){
-                return User::factory()->create();
+                return User::factory()->create()->id;
             }
         ];
     }

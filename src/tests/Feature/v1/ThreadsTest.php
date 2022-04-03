@@ -59,12 +59,54 @@ class ThreadsTest extends TestCase
         $response->assertStatus(422);
     }
 
+
+    public function testUpdateThreadWithCorrectData()
+    {
+        $user = User::factory()->create();
+        $thread = Thread::factory()->create(['user_id' => $user->id]);
+        Sanctum::actingAs($user);
+        $response = $this->putJson(route('thread.update',[$thread]),[
+            'title' => 'test updated thread',
+            'channel_id' => $thread->channel_id
+        ]);
+
+        $response->assertStatus(200);
+    }
+
+
+    public function testCheckAuthrizationUserForUpdateThread()
+    {
+        $user = User::factory()->create();
+        $thread = Thread::factory()->create();
+        Sanctum::actingAs($user);
+        $response = $this->putJson(route('thread.update', [$thread]),[
+
+            'title' => 'test updated thread',
+            'channel_id' => $thread->channel_id
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    public function testUpdateBestAnswerId()
+    {
+        $user = User::factory()->create();
+        $thread = Thread::factory()->create(['user_id' => $user->id]);
+        Sanctum::actingAs($user);
+        $response = $this->putJson(route('thread.update',[$thread]),[
+            'best_answer_id' => 8,
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('threads' , ['best_answer_id' => 8]);
+    }
+
     public function testDeleteThreads()
     {
-        $thread = Thread::factory()->create();
         $user = User::factory()->create();
+        $thread = Thread::factory()->create(['user_id' => $user->id]);
         Sanctum::actingAs($user);
-        $response = $this->deleteJson(route('thread.delete'),['id' => $thread->id]);
+        $response = $this->deleteJson(route('thread.delete',['id' => $thread->id]));
 
         $response->assertStatus(200);
         $this->assertDatabaseMissing('threads' , ['slug' => $thread->slug]);

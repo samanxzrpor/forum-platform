@@ -23,7 +23,7 @@ class ChannelFactory extends Factory
             'name'=> $name,
             'slug' => Str::slug($name),
             'user_id' => function (){
-                return User::factory()->create();
+                return User::factory()->create()->id;
             }
         ];
     }

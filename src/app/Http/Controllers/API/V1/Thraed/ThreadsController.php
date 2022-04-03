@@ -9,6 +9,7 @@ use App\Models\Thread;
 use App\Repositories\ThreadRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 class ThreadsController extends Controller
@@ -65,21 +66,31 @@ class ThreadsController extends Controller
     /**
      * @method PUT
      * @param UpdateThreadRequest $request
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateThreadRequest $request)
+    public function update(UpdateThreadRequest $request ,Thread $thread)
     {
         $trustedData = $request->validated();
 
-        Thread::find($trustedData['id'])->update([
-            'title' => $trustedData['title'],
-        ]);
+        if (!Gate::forUser(Auth::user())->allows('manage-thread' , $thread))
+            return response()->json(['message' => 'You are not allowed to update'] , Response::HTTP_FORBIDDEN);
+
+        resolve(ThreadRepository::class)->updateThread($thread, $trustedData);
+
+        return response()->json([
+            'message' => 'Thread updated successfully',
+        ], 200);
     }
 
 
-    public function delete(Request $request)
+    public function delete(int $id)
     {
-        Thread::findOrFail($request->input('id'))->delete();
+        $thread = Thread::findOrFail($id);
+
+        if (!Gate::forUser(Auth::user())->allows('manage-thread' , $thread))
+            return response()->json(['message' => 'You are not allowed to update'] , Response::HTTP_FORBIDDEN);
+
+        $thread->delete();
 
         return response()->json([
             'message' => 'Deleted created successfully'
