@@ -15,6 +15,7 @@ class AnswersTest extends TestCase
 
     public function testShowAllAnswer(): void
     {
+
         $answers = Answer::factory(13)->create();
         $response = $this->get(route('answers.list'));
 

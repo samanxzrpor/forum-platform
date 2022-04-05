@@ -105,17 +105,8 @@ class ChannelsTest extends TestCase
         ]);
 
         $response->assertStatus(200);
+        $this->assertDatabaseMissing('channels' , ['id'=>$channel->id , 'name' => $channel->name]);
     }
 
-//    public function testGetOwnChannelWithSlug()
-//    {
-//        $channel = Channel::factory()->create();
-//
-//        $response = $this->getJson(route('channels.one'),[
-//            'slug' => $channel->slug
-//        ]);
-//
-//        $response->assertStatus(200);
-//    }
 
 }
