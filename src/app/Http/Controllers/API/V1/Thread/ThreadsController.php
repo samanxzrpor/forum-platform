@@ -7,6 +7,7 @@ use App\Http\Requests\Threads\StoreThreadRequest;
 use App\Http\Requests\Threads\UpdateThreadRequest;
 use App\Models\Thread;
 use App\Repositories\ThreadRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -33,9 +34,9 @@ class ThreadsController extends Controller
      * Get One Thread With Slug Or ID Or Name
      * @method POST
      * @param string $slug
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function show(string $slug)
+    public function show(string $slug): JsonResponse
     {
         $thread = resolve(ThreadRepository::class)->getThread($slug);
 
@@ -49,9 +50,9 @@ class ThreadsController extends Controller
      * Store New Thread in Database
      * @method POST
      * @param StoreThreadRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(StoreThreadRequest $request)
+    public function store(StoreThreadRequest $request): JsonResponse
     {
         $trustedData = $request->validated();
 
@@ -66,9 +67,10 @@ class ThreadsController extends Controller
     /**
      * @method PUT
      * @param UpdateThreadRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Thread $thread
+     * @return JsonResponse
      */
-    public function update(UpdateThreadRequest $request ,Thread $thread)
+    public function update(UpdateThreadRequest $request ,Thread $thread): JsonResponse
     {
         $trustedData = $request->validated();
 
@@ -83,7 +85,7 @@ class ThreadsController extends Controller
     }
 
 
-    public function delete(int $id)
+    public function delete(int $id): JsonResponse
     {
         $thread = Thread::findOrFail($id);
 

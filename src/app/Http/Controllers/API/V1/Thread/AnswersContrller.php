@@ -6,12 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Threads\StoreAnswerRequest;
 use App\Http\Requests\Threads\UpdateAnswerRequest;
 use App\Models\Answer;
+use App\Models\Subscribe;
 use App\Models\Thread;
+use App\Models\User;
+use App\Notifications\NewReplayThread;
 use App\Repositories\AnswerRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\Response;
 
 class AnswersContrller extends Controller
@@ -37,6 +42,9 @@ class AnswersContrller extends Controller
     {
         $trustedData = $request->validated();
         resolve(AnswerRepository::class)->storeAnswer($trustedData);
+
+        # Get All Users That Subscribe Received Thread And Send Notification For Them
+        resolve(UserRepository::class)->sendNotification($trustedData['thread_id']);
 
         return response()->json([
             'message' => 'Answer created successfully'
