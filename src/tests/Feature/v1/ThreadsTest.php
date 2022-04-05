@@ -26,12 +26,10 @@ class ThreadsTest extends TestCase
 
         $thread = Thread::factory()->create();
 
-        $response = $this->getJson(route('thread.show') , [
-            'slug' => $thread->slug
-        ]);
+        $response = $this->getJson(route('thread.show' , [$thread->slug]));
 
         $response->assertStatus(200);
-//        $this->assertEquals($thread->name, $response->json());
+        $this->assertSame($response->json()['body'] , $thread->body);
     }
 
     public function testCreateNewThreadWithTrueData()

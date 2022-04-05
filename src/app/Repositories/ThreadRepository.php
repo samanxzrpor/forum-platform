@@ -12,13 +12,12 @@ class ThreadRepository
 {
 
     /**
-     * @param array $request
+     * @param string $slug
      * @return mixed
      */
-    public function getThread(Request $request)
+    public function getThread(string $slug)
     {
-        $fieldThatSearched = array_key_first($request->input());
-        return Thread::where($fieldThatSearched, $request->input($fieldThatSearched))->whereBlock(0)->first();
+        return Thread::whereSlug($slug)->whereBlock(0)->first();
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\V1\Thraed;
+namespace App\Http\Controllers\API\V1\Thread;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Threads\StoreThreadRequest;
@@ -32,12 +32,12 @@ class ThreadsController extends Controller
     /**
      * Get One Thread With Slug Or ID Or Name
      * @method POST
-     * @param Request $request
+     * @param string $slug
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Request $request)
+    public function show(string $slug)
     {
-        $thread = resolve(ThreadRepository::class)->getThread($request);
+        $thread = resolve(ThreadRepository::class)->getThread($slug);
 
         return response()->json(
             $thread
