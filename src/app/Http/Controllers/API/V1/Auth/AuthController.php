@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\Register;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -20,9 +21,9 @@ class AuthController extends Controller
      * Register Action
      * @method POST
      * @param Register $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function register(Register $request)
+    public function register(Register $request): JsonResponse
     {
         # Validation Request
         $trustedData = $request->validated();
@@ -44,10 +45,10 @@ class AuthController extends Controller
      * Login Action
      * @method POST
      * @param LoginRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws ValidationException
      */
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): JsonResponse
     {
         $trustedData = $request->validated();
 
@@ -59,13 +60,13 @@ class AuthController extends Controller
         ]);
     }
 
-    public function getUser()
+    public function getUser(): JsonResponse
     {
         return response()->json(Auth::user() , Response::HTTP_OK);
     }
 
 
-    public function logout()
+    public function logout(): void
     {
         Auth::logout();
     }
