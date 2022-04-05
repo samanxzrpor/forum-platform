@@ -48,13 +48,12 @@ class AnswersTest extends TestCase
     public function testUpdateAnswerWithCorrectDataAndPermissions() : void
     {
         $user = User::factory()->create();
-        $thread = Thread::factory()->create();
-        $answer = Answer::factory()->create(['thread_id' => $thread->id , 'user_id' => $user->id]);
+        $answer = Answer::factory()->create(['user_id' => $user->id]);
         Sanctum::actingAs($user);
 
         $response = $this->putJson(route('answers.update' , [$answer]),[
             'body' => 'Test Body For Update Answer',
-            'thread_id' => $thread->id
+            'thread_id' => $answer->thread_id
         ])->isSuccessful();
 
         $this->assertDatabaseHas('answers' , ['body' => 'Test Body For Update Answer']);
@@ -63,13 +62,12 @@ class AnswersTest extends TestCase
     public function testUpdateAnswerWithCorrectDataAndDontHavePermissions() : void
     {
         $user = User::factory()->create();
-        $thread = Thread::factory()->create();
-        $answer = Answer::factory()->create(['thread_id' => $thread->id]);
+        $answer = Answer::factory()->create();
         Sanctum::actingAs($user);
 
         $response = $this->putJson(route('answers.update' , [$answer]),[
             'body' => 'Test Body For Update Answer',
-            'thread_id' => $thread->id
+            'thread_id' => $answer->thread_id
         ]);
 
         $response->assertStatus(403);
@@ -81,8 +79,7 @@ class AnswersTest extends TestCase
     public function testDeleteAnswers(): void
     {
         $user = User::factory()->create();
-        $thread = Thread::factory()->create();
-        $answer = Answer::factory()->create(['thread_id' => $thread->id , 'user_id' => $user->id]);
+        $answer = Answer::factory()->create(['user_id' => $user->id]);
         Sanctum::actingAs($user);
 
         $response = $this->delete(route('answers.delete' , [$answer]));
