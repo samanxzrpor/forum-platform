@@ -6,6 +6,7 @@ use App\Models\Subscribe;
 use App\Models\Thread;
 use App\Models\User;
 use App\Notifications\NewReplayThread;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 
@@ -32,6 +33,8 @@ class UserRepository
     public function sendNotification($thread_id): void
     {
         $users = Subscribe::query()->where('thread_id', $thread_id)->pluck('user_id')->all();
+
         Notification::send(User::find($users), new NewReplayThread(Thread::find($thread_id)));
+
     }
 }

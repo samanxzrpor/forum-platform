@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\V1\Subscribe\SubscribesController;
 use App\Http\Controllers\API\V1\Thread\AnswersContrller;
 use App\Http\Controllers\API\V1\Thread\ThreadsController;
+use App\Http\Controllers\API\V1\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -30,5 +31,10 @@ Route::prefix('/thread')->group(function (){
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('{thread}/sub' , [SubscribesController::class , 'subscribe'])->name('subscribe');
         Route::post('{thread}/unsub' , [SubscribesController::class , 'unsubscribe'])->name('unsubscribe');
+    });
+
+    Route::prefix('notifications')->group(function () {
+
+        Route::get('list' , [UserController::class , 'userNotifications'])->name('notifications');
     });
 });

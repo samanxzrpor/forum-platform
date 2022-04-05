@@ -41,7 +41,7 @@ class AnswersContrller extends Controller
     public function store(StoreAnswerRequest $request): JsonResponse
     {
         $trustedData = $request->validated();
-        resolve(AnswerRepository::class)->storeAnswer($trustedData);
+        $answer = resolve(AnswerRepository::class)->storeAnswer($trustedData);
 
         # Get All Users That Subscribe Received Thread And Send Notification For Them
         resolve(UserRepository::class)->sendNotification($trustedData['thread_id']);
