@@ -46,6 +46,10 @@ class AnswersContrller extends Controller
         # Get All Users That Subscribe Received Thread And Send Notification For Them
         resolve(UserRepository::class)->sendNotification($trustedData['thread_id']);
 
+        # Increase User Score When Set new Answer
+        if (Thread::find($trustedData['thread_id'])->user_id !== Auth::user()->id)
+            Auth::user()->increment('score' , 10);
+
         return response()->json([
             'message' => 'Answer created successfully'
         ], Response::HTTP_CREATED);

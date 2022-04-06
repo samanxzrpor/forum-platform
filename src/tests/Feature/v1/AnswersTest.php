@@ -36,6 +36,22 @@ class AnswersTest extends TestCase
         $this->assertDatabaseHas('answers' , ['body'=>'New Test For Create Answer']);
     }
 
+
+    public function testIncreaseUserScoreWheneSubmitAnAnswer()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        $thread = Thread::factory()->create();
+        $response = $this->postJson(route('answers.store'),[
+            'body' => 'New Test For Create Answer',
+            'thread_id' => $thread->id
+        ]);
+        $user->refresh();
+        $this->assertDatabaseHas('users' , ['score' => 10]);
+        $this->assertEquals(10 , $user->score);
+    }
+
+
     public function testCreateNewAnswerWithIncorrectData(): void
     {
         Sanctum::actingAs(User::factory()->create());

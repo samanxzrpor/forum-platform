@@ -31,8 +31,8 @@ class NotificationTest extends TestCase
         ]);
 
         $response = $this->get(route('notifications'));
-        dd($response->json());
+
 //        $this->assertSame($response->json('notifications')['thread_title'] , $thread->title);
-//        Notification::assertSentTo($user , NewReplayThread::class);
+        Notification::assertSentTo($user , NewReplayThread::class);
     }
 }
