@@ -17,7 +17,7 @@ class ThreadRepository
      */
     public function getThread(string $slug)
     {
-        return Thread::whereSlug($slug)->whereBlock(0)->first();
+        return Thread::whereSlug($slug)->where('is_block' , 0)->first();
     }
 
     /**

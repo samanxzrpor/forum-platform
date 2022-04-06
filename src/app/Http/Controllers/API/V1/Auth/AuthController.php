@@ -62,7 +62,10 @@ class AuthController extends Controller
 
     public function getUser(): JsonResponse
     {
-        return response()->json(Auth::user() , Response::HTTP_OK);
+        return response()->json([
+            'user' => Auth::user(),
+            'notifications' => Auth::user()->unreadNotifications()
+        ] , Response::HTTP_OK);
     }
 
 

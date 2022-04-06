@@ -18,4 +18,9 @@ class UserController extends Controller
         ] , Response::HTTP_OK);
     }
 
+    public function leaderboard()
+    {
+        return response()->json(User::orderByDesc('score')->paginate(20) , Response::HTTP_OK);
+    }
+
 }

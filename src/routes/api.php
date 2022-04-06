@@ -25,5 +25,8 @@ Route::prefix('v1')->group(function (){
     # Threads Process Route
     include __DIR__ .'/v1/threads_routes.php';
 
+    # Users Routes
+    include __DIR__ .'/v1/users_routes.php';
+
 });
 

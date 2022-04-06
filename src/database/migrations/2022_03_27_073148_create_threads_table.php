@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique()->index();
             $table->text('body');
-            $table->boolean('block')->default(0);
+            $table->boolean('is_block')->default(0);
             $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete();
